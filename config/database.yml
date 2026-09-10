@@ -8,6 +8,10 @@ default: &default
   adapter: sqlite3
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+  # WAL is required for concurrent readers (Puma + Solid Queue/Cache/Cable) on the Kamal volume.
+  pragmas:
+    journal_mode: wal
+    busy_timeout: 5000
 
 development:
   <<: *default
